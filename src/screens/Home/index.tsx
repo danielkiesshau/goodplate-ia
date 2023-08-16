@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Image, ScrollView, Text, View } from 'react-native';
+import { Image, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { styles } from './styles';
 
@@ -15,9 +15,9 @@ export function Home() {
    }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Button onPress={handleSelectImage} />
-
+      <View style={styles.imageContainer}>
       {
         selectedImageUri ?
           <Image
@@ -30,7 +30,7 @@ export function Home() {
             Selecione a foto do seu prato para analizar.
           </Text>
       }
-
+      </View>
       <View style={styles.bottom}>
         <Tip message="Aqui vai uma dica" />
 
@@ -40,6 +40,6 @@ export function Home() {
           </View>
         </ScrollView>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

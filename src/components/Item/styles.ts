@@ -15,14 +15,16 @@ export const styles = StyleSheet.create({
     fontFamily: "Poppins_400Regular",
     fontSize: 16,
   },
-  percentage: {
-    fontFamily: "Poppins_700Bold",
-    fontSize: 14,
+  containerPercent: {
     backgroundColor: "#D5F2E1",
     height: 42,
     width: 42,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 7,
-    textAlign: "center",
-    textAlignVertical: "center",
+  },
+  percentage: {
+    fontFamily: "Poppins_700Bold",
+    fontSize: 14,
   },
 });

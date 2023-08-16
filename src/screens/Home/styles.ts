@@ -9,12 +9,17 @@ export const styles = StyleSheet.create({
     color: "#2E9D4C",
     fontFamily: "Poppins_400Regular",
     textAlign: "center",
+    alignSelf: 'center',
     fontSize: 14,
-    flex: 1,
     textAlignVertical: "center"
   },
   content: {
     flex: 1,
+  },
+  imageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   bottom: {
     flex: 1,
@@ -30,6 +35,6 @@ export const styles = StyleSheet.create({
     gap: 12
   },
   image: {
-    flex: 1
+    flex: 1,
   },
 });

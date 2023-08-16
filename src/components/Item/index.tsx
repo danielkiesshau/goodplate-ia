@@ -14,10 +14,11 @@ type Props = {
 export function Item({ data }: Props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.percentage}>
-        {data.percentage}
-      </Text>
-
+      <View style={styles.containerPercent}>
+        <Text style={styles.percentage}>
+          {data.percentage}
+        </Text>
+      </View>
       <Text style={styles.title}>
         {data.name}
       </Text>
