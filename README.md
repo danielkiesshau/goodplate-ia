@@ -32,6 +32,7 @@
 
 
   They provided a base project that worked on Android,
-  and I adapted it to work on iOS and developed a more "structured code"
+  I adapted it to work on iOS and developed a more "structured code"
   
-  https://www.youtube.com/watch?v=BYWHyKXhAn8&t=2088s&ab_channel=Rocketseat
+ [Video: Image Recognition with AI (Clarifai + React Native)](https://www.youtube.com/watch?v=BYWHyKXhAn8&t=2088s&ab_channel=Rocketseat)
+
