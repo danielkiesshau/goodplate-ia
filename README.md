@@ -28,8 +28,8 @@
   <image src="./assets/home.png" height="400"></image>
   <image src="./assets/meat-plate.png" height="400"></image>
 
-  #### Special Thanks to:
-  ### _Rocketseat_
+  # Special Thanks to: [_Rocketseat_](https://www.rocketseat.com.br/?utm_source=google&utm_medium=cpc&utm_campaign=lead&utm_term=perpetuo&utm_content=institucional-lead-home-texto-lead-brandkws-none-none-institucional-none-none-br-google&gclid=CjwKCAjwoqGnBhAcEiwAwK-Okct5WFiWIt35ejvDdHqNWOH9owr2MQ5InA-85NOx4lfjB7sfdhotJBoC-O8QAvD_BwE)
+
 
   They provided a base project that worked on Android,
   and I adapted it to work on iOS and developed a more "structured code"
