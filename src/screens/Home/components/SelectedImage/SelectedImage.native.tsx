@@ -37,7 +37,7 @@ const SelectedImage = ({
 
   async function handleSelectImage(): Promise<void> {
     try {
-    setRecognizedItem([]);
+      setRecognizedItem([]);
     
      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
  
@@ -125,8 +125,9 @@ const SelectedImage = ({
       .concepts
       .forEach((item: RecognizedItem) => {
         const isAcceptedFoodType = acceptedFoods.includes(item.name as FOOD_TYPES);
+        const shouldShowAllRecognitions = SHOW_ALL_RECOGNITIONS === 'true'
 
-        if (isAcceptedFoodType || SHOW_ALL_RECOGNITIONS) {
+        if (isAcceptedFoodType || shouldShowAllRecognitions) {
           recognizedItems.push(new RecognizedItemDTO(item).parse());
         }
       });

@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     height: 56,
     borderRadius: 7,
     justifyContent: 'center',
-    backgroundColor: "#2E9D4C",
+    backgroundColor: "#55914d",
   },
   message: {
     fontFamily: "Poppins_400Regular",
