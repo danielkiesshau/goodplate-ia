@@ -1,9 +1,9 @@
 import { FlatList, ListRenderItem, View } from "react-native";
 
-import { RecognizedItem } from "../../../modules/interfaces";
-import { Item } from "../../../components/Item";
-import { Tip } from "../../../components/Tip";
-import { Loading } from "../../../components/Loading";
+import { RecognizedItem } from "../../../../modules/interfaces";
+import { Item } from "../../../../components/Item";
+import { Tip } from "../../../../components/Tip";
+import { Loading } from "../../../../components/Loading";
 import { styles } from "./BottomContent.styles";
 
 interface BottomContentProps {

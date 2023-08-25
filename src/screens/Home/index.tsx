@@ -3,7 +3,7 @@ import { View } from 'react-native';
 
 import { styles } from './styles';
 import { RecognizedItem } from '../../modules/interfaces';
-import BottomContent from './components/BottomContent.native'
+import BottomContent from './components/BottomContent/BottomContent.native'
 import { ImageBase64 } from '../../modules/interfaces';
 import SelectedImage from './components/SelectedImage/SelectedImage.native';
 
