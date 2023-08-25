@@ -21,21 +21,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  bottom: {
-    flex: 1,
-    backgroundColor: "#D9D9D9",
-    borderTopLeftRadius: 32,
-    borderTopRightRadius: 32,
-    paddingHorizontal: 24,
-    marginTop: -42,
-    paddingTop: 12
-  },
-  listContent: {
-    marginTop: 12,
-  },
-  items: {
-    flex: 1,
-  },
   image: {
     flex: 1,
     height: '100%',

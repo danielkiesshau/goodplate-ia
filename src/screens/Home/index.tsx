@@ -4,14 +4,12 @@ import * as ImagePicker from 'expo-image-picker';
 
 import { styles } from './styles';
 
-import { Tip } from '../../components/Tip';
-import { Item } from '../../components/Item';
 import { Button } from '../../components/Button';
 import { api } from '../../modules/api';
 import { FOOD_TYPES, RecognizedItem } from '../../modules/interfaces';
 import RecognizedItemDTO from '../../modules/RecognizedItemDTO';
-import { Loading } from '../../components/Loading';
 import { byFoodType } from '../../modules/utils/byFoodType';
+import BottomContent from './components/BottomContent.native'
 
 const {
   EXPO_PUBLIC_MODEL_ID: MODEL_ID ,
@@ -39,7 +37,7 @@ export function Home() {
         setRecognizedItem={setRecognizedItem}
         setTipMessage={setTipMessage}
       />
-      <BottomContent 
+      <BottomContent
         isLoading={isLoading}
         tipMessage={tipMessage}
         recognizedItems={recognizedItems} 
@@ -211,44 +209,3 @@ const SelectedImage = ({
   )
 };
 
-interface BottomContentProps {
-  isLoading: boolean;
-  recognizedItems: RecognizedItem[];
-  tipMessage: string;
-}
-
-const BottomContent = ({
-  recognizedItems,
-  isLoading,
-}: BottomContentProps) => { 
-  const renderItem: ListRenderItem<RecognizedItem> = ({ item }) => {
-    return (
-      <Item 
-        data={{ 
-          name: item.name, 
-          percentage: `${item.value}%` 
-        }}
-      />
-    )
-  }
-  const keyExtractor = (item: RecognizedItem): string => item.name;
-
-  return (
-    <View style={styles.bottom}>
-        <Tip message="Tip of the day" />
-          <View style={styles.items}>
-            {isLoading ? 
-              <Loading /> : (
-              <FlatList 
-                showsVerticalScrollIndicator={false}
-                data={recognizedItems}
-                extraData={isLoading}
-                renderItem={renderItem}
-                keyExtractor={keyExtractor}
-                contentContainerStyle={styles.listContent}
-              />
-            )}
-        </View>
-      </View>
-  )
-};
