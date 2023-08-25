@@ -30,9 +30,11 @@ export const styles = StyleSheet.create({
     marginTop: -42,
     paddingTop: 12
   },
+  listContent: {
+    marginTop: 12,
+  },
   items: {
     flex: 1,
-    gap: 12
   },
   image: {
     flex: 1,

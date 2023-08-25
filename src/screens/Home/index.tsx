@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, Image, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { Alert, FlatList, Image, ListRenderItem, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 import { styles } from './styles';
@@ -8,35 +8,43 @@ import { Tip } from '../../components/Tip';
 import { Item } from '../../components/Item';
 import { Button } from '../../components/Button';
 import { api } from '../../modules/api';
+import { FOOD_TYPES, RecognizedItem } from '../../modules/interfaces';
+import RecognizedItemDTO from '../../modules/RecognizedItemDTO';
+import { Loading } from '../../components/Loading';
+import { byFoodType } from '../../modules/utils/byFoodType';
 
 const {
   EXPO_PUBLIC_MODEL_ID: MODEL_ID ,
   EXPO_PUBLIC_API_MODEL_VERSION_ID: MODEL_VERSION_ID ,
   EXPO_PUBLIC_API_USER_ID: API_USER_ID,
   EXPO_PUBLIC_API_APP_ID: API_APP_ID,
+  EXPO_PUBLIC_SHOW_ALL_RECOGNITIONS: SHOW_ALL_RECOGNITIONS,
 } = process.env;
 
 type ImageBase64 = string | undefined | null;
 
-interface RecognizedItem {
-  name: string;
-  value: number;
-}
-
 export function Home() {
   const [selectedImageUri, setSelectedImageUri] = useState<ImageBase64>('');
+  const [tipMessage, setTipMessage] = useState<string>('');
+  const [recognizedItems, setRecognizedItem] = useState<RecognizedItem[]>([]);
   const [isLoading, setLoading] = useState<boolean>(false);
   
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <SelectedImage 
         isLoading={isLoading} 
         selectedImageUri={selectedImageUri} 
         setLoading={setLoading} 
         setSelectedImageUri={setSelectedImageUri}
+        setRecognizedItem={setRecognizedItem}
+        setTipMessage={setTipMessage}
       />
-      <BottomContent />
-    </SafeAreaView>
+      <BottomContent 
+        isLoading={isLoading}
+        tipMessage={tipMessage}
+        recognizedItems={recognizedItems} 
+      />
+    </View>
   );
 }
 
@@ -45,7 +53,9 @@ interface SelectedImageProps {
   isLoading: boolean,
   selectedImageUri: ImageBase64,
   setLoading: (flag: boolean) => void;
-  setSelectedImageUri: (uri: ImageBase64) => void;
+  setSelectedImageUri: (image: ImageBase64) => void;
+  setRecognizedItem: (items: RecognizedItem[]) => void;
+  setTipMessage: (message: string) => void;
 }
 
 const SelectedImage = ({
@@ -53,11 +63,15 @@ const SelectedImage = ({
   selectedImageUri,
   setLoading,
   setSelectedImageUri,
+  setRecognizedItem,
+  setTipMessage,
 }: SelectedImageProps) => {
 
 
   async function handleSelectImage(): Promise<void> {
     try {
+    setRecognizedItem([]);
+    
      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
  
      const isPermissionGranted = status === ImagePicker.PermissionStatus.GRANTED;
@@ -75,7 +89,7 @@ const SelectedImage = ({
      })
  
      if (imageResponse.canceled) {
-       return Alert.alert("Selecione uma imagem")
+       return Alert.alert("Select an Image")
      }
  
      const {
@@ -112,16 +126,61 @@ const SelectedImage = ({
       const url = `v2/models/${MODEL_ID}/versions/${MODEL_VERSION_ID}/outputs`;
       
       console.log('INFO: url', url);
-      console.log('INFO: body', JSON.stringify(body))
+      // console.log('INFO: body', JSON.stringify(body));
 
-      setLoading(true)
+      setLoading(true);
 
       const response = await api.post(
         url,
         body,
-      )
+      );
 
-      console.log('INFO: response', response)
+      console.log('INFO: response', response);
+
+      let recognizedItems: RecognizedItem[] = []
+
+      const acceptedFoods = [
+        FOOD_TYPES.VEGETABLES,
+        FOOD_TYPES.MEAT,
+        FOOD_TYPES.LEGUMES,
+        FOOD_TYPES.CHICKEN,
+        FOOD_TYPES.RICE,
+        FOOD_TYPES.EGG,
+        FOOD_TYPES.TOMATO,
+        FOOD_TYPES.SAUSAGE,
+        FOOD_TYPES.HAM,
+        FOOD_TYPES.BACON,
+        FOOD_TYPES.PORK,
+      ]
+
+      response.data.outputs[0]
+      .data
+      .concepts
+      .forEach((item: RecognizedItem) => {
+        const isAcceptedFoodType = acceptedFoods.includes(item.name as FOOD_TYPES);
+
+        if (isAcceptedFoodType || SHOW_ALL_RECOGNITIONS) {
+          recognizedItems.push(new RecognizedItemDTO(item).parse());
+        }
+      });
+
+      // set vegetable tip (42:39)
+      const hasVegetable = recognizedItems.find((
+        item
+      ) => byFoodType(FOOD_TYPES.VEGETABLES, item));
+
+      if (!!hasVegetable) {
+        setTipMessage("Add some healthy vegetable! :)")
+      }
+
+      recognizedItems.sort((
+        itemA: RecognizedItem, 
+        itemB: RecognizedItem
+      ) => itemB.value - itemA.value)
+      
+      console.log('INFO: recognizedItems', recognizedItems);
+
+      setRecognizedItem(recognizedItems);
 
     } catch (error: any) {
       console.log('ERROR: ', JSON.stringify(error));
@@ -144,7 +203,7 @@ const SelectedImage = ({
           />
           :
           <Text style={styles.description}>
-            Selecione a foto do seu prato para analizar.
+            Select a photo of a meal to be analysed
           </Text>
       }
       </View>
@@ -152,16 +211,44 @@ const SelectedImage = ({
   )
 };
 
+interface BottomContentProps {
+  isLoading: boolean;
+  recognizedItems: RecognizedItem[];
+  tipMessage: string;
+}
 
-const BottomContent = () => {
+const BottomContent = ({
+  recognizedItems,
+  isLoading,
+}: BottomContentProps) => { 
+  const renderItem: ListRenderItem<RecognizedItem> = ({ item }) => {
+    return (
+      <Item 
+        data={{ 
+          name: item.name, 
+          percentage: `${item.value}%` 
+        }}
+      />
+    )
+  }
+  const keyExtractor = (item: RecognizedItem): string => item.name;
+
   return (
     <View style={styles.bottom}>
-        <Tip message="Aqui vai uma dica" />
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 24 }}>
+        <Tip message="Tip of the day" />
           <View style={styles.items}>
-            <Item data={{ name: 'Vegetal', percentage: '95%' }} />
-          </View>
-        </ScrollView>
+            {isLoading ? 
+              <Loading /> : (
+              <FlatList 
+                showsVerticalScrollIndicator={false}
+                data={recognizedItems}
+                extraData={isLoading}
+                renderItem={renderItem}
+                keyExtractor={keyExtractor}
+                contentContainerStyle={styles.listContent}
+              />
+            )}
+        </View>
       </View>
   )
 };
