@@ -1,7 +1,7 @@
 
   # Goodplate  
   
-  Project developed to practice AI image recognition in food plates.
+  Project developed to practice AI image recognition on food plates.
 
   It detects what types of food there are on the plate, 
   and list the percentage of how much of each there are on it.
