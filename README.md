@@ -22,7 +22,7 @@
 
   **When** I select an image
 
-  **Then** the app should list if it has _vegetables, meat, rice..._
+  **Then** the app should list how much my plate has of _vegetables, meat, rice..._
   
   <image src="./assets/user-flow.gif" height="400"></image>
   <image src="./assets/home.png" height="400"></image>
